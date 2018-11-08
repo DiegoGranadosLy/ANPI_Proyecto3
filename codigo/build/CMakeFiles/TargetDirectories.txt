@@ -1,0 +1,6 @@
+/home/diego/Escritorio/ANPI_Proyecto3/codigo/build/CMakeFiles/rebuild_cache.dir
+/home/diego/Escritorio/ANPI_Proyecto3/codigo/build/CMakeFiles/edit_cache.dir
+/home/diego/Escritorio/ANPI_Proyecto3/codigo/build/src/CMakeFiles/edit_cache.dir
+/home/diego/Escritorio/ANPI_Proyecto3/codigo/build/src/CMakeFiles/anpi.dir
+/home/diego/Escritorio/ANPI_Proyecto3/codigo/build/src/CMakeFiles/rebuild_cache.dir
+/home/diego/Escritorio/ANPI_Proyecto3/codigo/build/src/CMakeFiles/proyecto3.dir
