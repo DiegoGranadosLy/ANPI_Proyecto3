@@ -1,5 +1,22 @@
+//Instituto Tecnologico de Costa Rica
+//Area Academica de Ingenieria en Computadores
+//Analisis Numerico para Ingenieria
+//Proyecto 3: Calculo del perfil termico de una 
+//			  placa por el metodo de Liebmman
+//Profesor: Dr.Pablo Alvarado Moya
+//Estudiantes:
+//			Nestor Baltodano
+//			Diego Granados
+//Segundo Semestre, 2018
+
+
+
+
 #include <boost/program_options.hpp>
+#include <boost/algorithm/string.hpp>
 #include <iostream>
+#include <fstream>
+#include <stdlib.h>
 #include <string>
 #include <vector>
 
@@ -18,13 +35,18 @@ struct message{
 	int sizeSquare;
 };
 
+/*
+*
+*/
 void fillPlate(vector<double> &myVector,double value){
 	for(unsigned int i=0;i<myVector.size();++i){
 		myVector[i] = value;
 	}
 }
 
-
+/*
+*
+*/
 void fillPlateWithDelta(vector<double> &myVector,double startvalue,double endvalue,int width){
 	double delta = (startvalue - endvalue)/((double) width);
 	for(unsigned int i=0;i<myVector.size();++i){
@@ -32,6 +54,52 @@ void fillPlateWithDelta(vector<double> &myVector,double startvalue,double endval
 	}
 }
 
+/*
+*
+*/
+void ReadFile(string path, message &msj){
+    std::ifstream infile(path);
+    std::string line;
+    vector<string> strs;
+    vector<double> *v(0);
+    int width =0;
+    while (std::getline(infile, line)) {                //Se lee el archivo linea por linea
+        boost::split(strs,line,boost::is_any_of(" "));  //Se parte la linea por el separador de espacio.
+        if(strs[0].compare("top")==0){                  //Placa superior
+            v = &msj.pUp;
+            width = msj.horizontal;
+        }else
+            if(strs[0].compare("bottom")==0){           //Placa inferior
+                v = &msj.pDown;
+                width = msj.horizontal;
+            }else
+                if(strs[0].compare("left")==0){         //Placa izquierda
+                    v = &msj.pLeft;
+                    width = msj.vertical;
+                }else
+                    if(strs[0].compare("right")==0){    //Placa derecha
+                        v = &msj.pRight;
+                        width = msj.vertical;
+                    }    
+
+        if(strs.size()==3){         //Valor constante en la placa
+            fillPlate(*v,atof(strs[2].c_str()));
+        }else{
+            if(strs.size()==4){     //Incremento lineal en la temperatura de la placa
+                fillPlateWithDelta(*v,atof(strs[2].c_str()),atof(strs[3].c_str()),width);
+            }else{
+                if (strs.size()>4){ //Spline cubico para el calculo de la temperatura de la placa.
+                    spline();
+                }else{
+                }
+            }
+        }
+    }
+}
+
+/*
+*
+*/
 int main(int ac, char* av[])
 {
     try {
@@ -46,7 +114,7 @@ int main(int ac, char* av[])
             ("TempBI,b",po::value<double>(), "Temperatura borde inferior")
             ("TempBL,l",po::value<double>(), "Temperatura borde izquierdo")
             ("TempBD,d",po::value<double>(), "temperatura borde derecho")
-            ("Aislar,i",po::value<std::vector<string> >(&listI)->multitoken()->default_value(" t b l r "),
+            ("Aislar,i",po::value<std::vector<string> >(&listI)->multitoken(),
             			"Aislar los bordes indicados (t=arriba , b=abajo, i=izquierda, r=derecha)")
             ("Archivo,p",po::value<string>(), "Nombre del archivo con el perfil termico")
             ("Horizontal,h",po::value<int>()->default_value(500), "Numero de pixeles horizontales")
@@ -97,28 +165,37 @@ int main(int ac, char* av[])
         }
 
         if (vm.count("Archivo")) {/*************************/ //Sin valor por default. Ruta absoluta
-            cout << "Opcion p" << "\n";
-            cout << "P: " << vm["Archivo"].as<std::string>() << ".\n";
+            ReadFile(vm["Archivo"].as<std::string>(),msj);
         }
 
         if (vm.count("Aislar")) {							//Bandera para aislar la placa
     		cout << "listI is length " << listI.size() << endl;
     		for(unsigned int i = 0; i < listI.size(); i++){
-      			if(listI[i].compare("t")){					//Aislar placa de Arriba
+      			if(listI[i].compare("t")==0){					//Aislar placa de Arriba
       				fillPlate(msj.pUp,(double)0);
       			}else 
-      				if (listI[i].compare("b")){				//Aislar placa de Abajo
+      				if (listI[i].compare("b")==0){				//Aislar placa de Abajo
       					fillPlate(msj.pDown,(double)0);
       				}else 
-      					if(listI[i].compare("l")){			//Aislar placa izquierda
+      					if(listI[i].compare("l")==0){			//Aislar placa izquierda
       						fillPlate(msj.pLeft,(double)0);
       					}else
-      						if(listI[i].compare("r")){		//Aislar placa derecha
+      						if(listI[i].compare("r")==0){		//Aislar placa derecha
       							fillPlate(msj.pRight,(double)0);
       						}else {
       							cout << "\n Unknown option \n" << endl;
       						}
   			}
+        }
+
+        //En caso de que nose defina ni un archivo, ni una placa aislada, ni temperatura en la placa
+        if(!(vm.count("Aislar"))&& !(vm.count("Archivo"))){
+            if(!(vm.count("TempBS")) || !(vm.count("TempBI")) || !(vm.count("TempBL")) || !(vm.count("TempBD"))){
+                fillPlate(msj.pUp,(double)0);
+                fillPlate(msj.pDown,(double)0);
+                fillPlate(msj.pLeft,(double)0);
+                fillPlate(msj.pRight,(double)0);
+            }
         }
 
         if (vm.count("Calcular")) {/************************/  //Sin valor por default.
