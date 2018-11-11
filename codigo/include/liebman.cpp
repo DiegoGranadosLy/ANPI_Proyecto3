@@ -19,6 +19,11 @@ struct message{
   int sizeSquare;
 };
 
+double cal_error(double &_a, double &_b)
+{
+	return ((a-b)/a) * 100;
+}
+
 void Liebmann(message _s)
 {
 	vector<double> _pUp, _pDown, _pLeft, _pRight;
@@ -53,7 +58,11 @@ void Liebmann(message _s)
 					_rigth = _pRight;
 
 				_tmp = _matrix + i*j;
-				_matrix + i*j = 
+				_matrix + i*j = (_matrix + i*_up) + (_matrix + i*_down) + (_matrix + j*_left) + (_matrix + j*_rigth);
+				_error = cal_error(_matrix + i*j, _tmp);
+
+				if (_error >  _testAcept)
+					_testAcept = _error; 
 			}
 		}
 	}
