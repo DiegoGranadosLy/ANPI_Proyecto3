@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/diego/Escritorio/ANPI_Proyecto3/codigo/src/main.cpp
+boost/program_options.hpp
+-
+boost/algorithm/string.hpp
+-
+opencv2/core.hpp
+-
+opencv2/highgui.hpp
+-
+iostream
+-
+fstream
+-
+stdlib.h
+-
+string
+-
+vector
+-
+
