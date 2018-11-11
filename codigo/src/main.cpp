@@ -292,12 +292,29 @@ void spline(vector<double> &myVector,vector<string> &strs){
     x[x.size()-1] = myVector.size();
     vector<SplineSet> cs = getSpline(x, y);
     for(unsigned int i = 0; i < cs.size(); ++i){
-        cout << sin(i+1) << " = \t"   << cs[i].a << " *("<< cs[i].x << "-t)^3 +";
-                                cout << cs[i].b << " *("<<  cs[i].x << "-t)^2 +";
-                                cout << cs[i].c << " *("<<  cs[i].x << "-t)^1 +";
-                                cout << cs[i].d;
-                                cout << "\n\n\n";
+        cout << cs[i].a << " *("<< strs[i+2] << "-t)^3 +";
+        cout << cs[i].b << " *("<< strs[i+2] << "-t)^2 +";
+        cout << cs[i].c << " *("<< strs[i+2] << "-t)^1 +";
+        cout << cs[i].d;
+        cout << "\n\n\n";
     }
+    unsigned int index=0;
+    unsigned int seccion=myVector.size()/(strs.size()-2);
+    for(unsigned int i=0;i<myVector.size();++i){
+        if (i>seccion*index)
+            ++index;
+        myVector[i] = cs[index].a*(cs[index].x-i)*(cs[index].x-i)*(cs[index].x-i) + 
+                      cs[index].b*(cs[index].x-i)*(cs[index].x-i) + 
+                      cs[index].c*(cs[index].x-i) + 
+                      cs[index].d;
+    }
+
+    cout << "resultado del vector..!!\n\n" << endl;
+    for(unsigned int i=0;i<myVector.size();++i){
+        cout << myVector[i] << endl;
+    }
+
+
 }
 
 /**
