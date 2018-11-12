@@ -27,20 +27,11 @@
 #include <string>
 #include <vector>
 
+#include <liebman.hpp>
+
 namespace po = boost::program_options;
 using namespace std;
 
-
-struct message{
-	vector<double> pUp;
-	vector<double> pDown;
-	vector<double> pLeft;
-	vector<double> pRight;
-	string pathFile;
-	int horizontal;
-	int vertical;
-	int sizeSquare;
-};
 
 struct SplineSet{
     double a;
@@ -158,38 +149,17 @@ int main(int ac, char* av[]){
             }
         }
 
-        if (vm.count("Calcular")) {/************************/  //Sin valor por default.
-            //Llamada al maetodo de Liebman para calcular el perfil termico.
-            //liebman(msj);
-            cout << "Opcion para calcular" << "\n";
+        if (vm.count("Calcular")) {/************************/       //Sin valor por default.
+            double matrix[msj.horizontal][msj.vertical] = { 0 };
+            cout << "Antes de Liebman" << endl;
+            liebman::Liebmann(msj,(double **)matrix);               //Calculo de las temperaturas
+            cout << "Despues de Liebman" << endl;
+            if (vm.count("Visualizar")) {/**********************/   //Sin valor por default.
+                //Codigo para visualizar el resultado con opencv
+                cout << "Opcion de visualizacion" << "\n";
+            }
         }
         
-        if (vm.count("Visualizar")) {/**********************/  //Sin valor por default.
-        	//Conversion a una imagen de opencv de la matriz.
-            // double map[20][20] =   {{1,2,3,4,5,6,7,8,9,10,1,2,3,4,5,6,7,8,9,10},
-            //                         {1,2,3,4,5,6,7,8,9,10,1,2,3,4,5,6,7,8,9,10},
-            //                         {1,2,3,4,5,6,7,8,9,10,1,2,3,4,5,6,7,8,9,10},
-            //                         {1,2,3,4,5,6,7,8,9,10,1,2,3,4,5,6,7,8,9,10},
-            //                         {1,2,3,4,5,6,7,8,9,10,1,2,3,4,5,6,7,8,9,10},
-            //                         {1,2,3,4,5,6,7,8,9,10,1,2,3,4,5,6,7,8,9,10},
-            //                         {1,2,3,4,5,6,7,8,9,10,1,2,3,4,5,6,7,8,9,10},
-            //                         {1,2,3,4,5,6,7,8,9,10,1,2,3,4,5,6,7,8,9,10},
-            //                         {1,2,3,4,5,6,7,8,9,10,1,2,3,4,5,6,7,8,9,10},
-            //                         {1,2,3,4,5,6,7,8,9,10,1,2,3,4,5,6,7,8,9,10},
-            //                         {1,2,3,4,5,6,7,8,9,10,1,2,3,4,5,6,7,8,9,10},
-            //                         {1,2,3,4,5,6,7,8,9,10,1,2,3,4,5,6,7,8,9,10},
-            //                         {1,2,3,4,5,6,7,8,9,10,1,2,3,4,5,6,7,8,9,10},
-            //                         {1,2,3,4,5,6,7,8,9,10,1,2,3,4,5,6,7,8,9,10},
-            //                         {1,2,3,4,5,6,7,8,9,10,1,2,3,4,5,6,7,8,9,10},
-            //                         {1,2,3,4,5,6,7,8,9,10,1,2,3,4,5,6,7,8,9,10},
-            //                         {1,2,3,4,5,6,7,8,9,10,1,2,3,4,5,6,7,8,9,10},
-            //                         {1,2,3,4,5,6,7,8,9,10,1,2,3,4,5,6,7,8,9,10},
-            //                         {1,2,3,4,5,6,7,8,9,10,1,2,3,4,5,6,7,8,9,10},
-            //                         {1,2,3,4,5,6,7,8,9,10,1,2,3,4,5,6,7,8,9,10},}
-            // // map /= 255.0f; // normalize image range to 0 .. 255
-            // cv::imshow(mapPath,map);
-            cout << "Opcion de visualizacion" << "\n";
-        }
 
     }
     catch(exception& e) {
