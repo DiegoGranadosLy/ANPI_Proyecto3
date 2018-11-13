@@ -19,13 +19,13 @@ struct message{
 		int vertical;
 		int sizeSquare;
 	};
-	
+
 namespace liebman{
 	const double acceptable = 0.001;
 	const int iterations = 9;
 
 	double cal_error(double &_a, double &_b);
-	void Liebmann(message _s,double **tempMatrix);
+	void Liebmann(message _s,double *matrix);
 } // namespace LIEBMAN
 
 #include <liebman.cpp>

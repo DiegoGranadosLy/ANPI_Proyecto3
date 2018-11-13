@@ -68,8 +68,8 @@ int main(int ac, char* av[]){
             ("Aislar,i",po::value<std::vector<string> >(&listI)->multitoken(),
             			"Aislar los bordes indicados (t=arriba , b=abajo, i=izquierda, r=derecha)")
             ("Archivo,p",po::value<string>(), "Nombre del archivo con el perfil termico")
-            ("Horizontal,h",po::value<int>()->default_value(500), "Numero de pixeles horizontales")
-            ("Vertical,v",po::value<int>()->default_value(500), "Numero de pixeles verticales")
+            ("Horizontal,h",po::value<int>()->default_value(100), "Numero de pixeles horizontales")
+            ("Vertical,v",po::value<int>()->default_value(100), "Numero de pixeles verticales")
             ("Visualizar,q", "Desactivar la visualizacion")
             ("Calcular,f", "Activar el calculo de flujo de calor")
             ("Tamano,g",po::value<int>()->default_value(10), "Tamano de la rejilla para el calculo de calor")
@@ -150,9 +150,9 @@ int main(int ac, char* av[]){
         }
 
         if (vm.count("Calcular")) {/************************/       //Sin valor por default.
-            double matrix[msj.horizontal][msj.vertical] = { 0 };
+            double *matrix = (double *) calloc(msj.horizontal*msj.vertical,sizeof(double));
             cout << "Antes de Liebman" << endl;
-            liebman::Liebmann(msj,(double **)matrix);               //Calculo de las temperaturas
+            liebman::Liebmann(msj,matrix);               //Calculo de las temperaturas
             cout << "Despues de Liebman" << endl;
             if (vm.count("Visualizar")) {/**********************/   //Sin valor por default.
                 //Codigo para visualizar el resultado con opencv
